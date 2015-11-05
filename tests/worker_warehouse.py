@@ -56,26 +56,26 @@ import uwsgi
 
 
 def warehouse_get(*args):
-    return uwsgi.worker_warehouse_get()
+    x = uwsgi.warehouse_get()
+    uwsgi.log("worker {0} got {1} type {2} ".format(uwsgi.worker_id(), x, type(x)))
+    return x
 
 def warehouse_set(*args):
     data = args[0]
-    uwsgi.worker_warehouse_set(data)
+    data = int(data)
+    uwsgi.warehouse_set(data)
     uwsgi.log("set {0} in worker {1}".format(data, uwsgi.worker_id()))
     return str(uwsgi.worker_id())
 
 def warehouse_clear(*args):
-    uwsgi.worker_warehouse_clear()
+    uwsgi.warehouse_clear()
     uwsgi.log("warehouse clean in worker {0}".format(uwsgi.worker_id()))
     return str(uwsgi.worker_id())
 
 def all_workers_warehouse(*args):
     warehouse = uwsgi.workers_warehouse()
-    warehouse_dict = {}
-    for index, data in enumerate(warehouse):
-        warehouse_dict[index+1] = data
-
-    return warehouse_dict
+    print type(warehouse), warehouse
+    return warehouse
 
 
 routes = {

@@ -658,6 +658,14 @@ void init_uwsgi_embedded_module() {
 		PyTuple_SetItem(up.workers_tuple, i, zero);
 	}
 
+	up.warehouse_dict = PyDict_New();
+	for (i = 0; i < uwsgi.numproc; i++) {
+		zero = Py_BuildValue("i", i+1);
+		Py_INCREF(Py_None);
+		PyDict_SetItem(up.warehouse_dict, zero, Py_None);
+		Py_DECREF(Py_None);
+		Py_DECREF(zero);
+	}
 
 #ifdef PYTHREE
 	PyImport_AppendInittab("uwsgi", init_uwsgi3);
